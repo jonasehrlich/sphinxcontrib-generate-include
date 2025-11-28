@@ -11,8 +11,9 @@ jobs:
         python-version: ["3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v3
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync
+      - run: uv pip install -e .
       - name: test
         run: uv run pytest
 
@@ -20,8 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v7
       - name: check-format
         run: uv run ruff format --check
 
@@ -30,8 +30,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v7
       - name: lint
         run: uv run ruff check --output-format github
 
@@ -39,8 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v7
       - name: check-types
         run: uv run pyrefly check
 
@@ -48,7 +46,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync
+      - run: uv pip install -e .
       - name: build-docs
         run: uv run sphinx-build -W docs docs/_build
