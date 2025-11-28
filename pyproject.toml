@@ -1,6 +1,6 @@
 [project]
 name = "sphinxcontrib-generate-include"
-version = "0.1.0"
+version = "0.1.1"
 description = "Generate included Sphinx markup through Python"
 authors = [{ name = "Jonas Ehrlich", email = "jonas.ehrlich@gmail.com" }]
 license = "MIT"
