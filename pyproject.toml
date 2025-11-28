@@ -1,0 +1,17 @@
+[project]
+name = "sphinxcontrib-generate-include"
+version = "0.1.0"
+description = "Generate included Sphinx markup through Python"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["myst-parser", "sphinx"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.1",
+    "pytest-sugar>=1.1.1",
+    "ruff>=0.14.6",
+]
+
+[tool.ruff]
+line-length = 100
