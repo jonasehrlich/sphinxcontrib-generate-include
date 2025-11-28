@@ -13,6 +13,7 @@ include = ["sphinxcontrib*"]
 dev = [
     "furo>=2025.9.25",
     "myst-parser>=4.0.1",
+    "pyrefly>=0.43.1",
     "pytest>=9.0.1",
     "pytest-subtests>=0.15.0",
     "pytest-sugar>=1.1.1",
@@ -37,5 +38,11 @@ select = [
     # flake8-simplify
     "SIM",
     # isort
-    "I","PL","RUF"
+    "I",
+    "PL",
+    "RUF",
 ]
+
+
+[tool.pyrefly]
+project-excludes = ["**/.[!/.]*", "test/**"]

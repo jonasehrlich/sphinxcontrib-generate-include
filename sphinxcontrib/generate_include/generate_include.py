@@ -28,7 +28,7 @@ class GenerateIncludeDirective(SphinxDirective):
         "type": lambda x: directives.choice(x, ("md", "rst", "literal")),
     }
 
-    def run(self) -> list[nodes.Node]:
+    def run(self) -> list[nodes.Node]:  # pyrefly: ignore[bad-override]
         """Execute the directive."""
         # Parse the argument: file.py:function_name
         argument = self.arguments[0]

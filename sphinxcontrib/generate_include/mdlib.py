@@ -1,5 +1,5 @@
 import collections.abc
-from typing import Literal
+from typing import Literal, cast
 
 import jinja2
 
@@ -13,7 +13,7 @@ MDTABLE_TEMPLATE = jinja2.Template("""
 """)
 
 
-Alignment = Literal["l", "r", "c"]
+type Alignment = Literal["l", "r", "c"]
 Row = collections.abc.Sequence[str]
 
 
@@ -52,11 +52,13 @@ def table(
     """
     alignment_line: list[str] = []
     alignment_per_header: list[Alignment] = (
-        [alignment] * len(headers) if isinstance(alignment, str) else list(alignment)
+        cast(list[Alignment], [alignment] * len(headers))
+        if isinstance(alignment, str)
+        else list(alignment)
     )
 
     alignment_line = [
-        _table_column_alignment_specifier(col_align, header)
+        _table_column_alignment_specifier(cast(Alignment, col_align), header)
         for header, col_align in zip(headers, alignment_per_header, strict=True)
     ]
 
