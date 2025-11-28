@@ -17,7 +17,7 @@ release = __version__
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 extensions = [
     "myst_parser",
-    # "sphinxcontrib.generate_include",
+    "sphinxcontrib.generate_include",
     "sphinx_design",
 ]
 

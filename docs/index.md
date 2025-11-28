@@ -5,8 +5,8 @@ ReStructuredText or literal in the Sphinx document.
 
 ## `generate-include` directive
 
-This directive executes a Python function and includes its output in the documentation, parsed as
-Markdown, reStructuredText, or literal text.
+This directive executes a Python function from a file and includes its output in the documentation,
+parsed as Markdown, reStructuredText, or literal text.
 
 `````{tab-set-code}
    ````md
@@ -19,9 +19,37 @@ Markdown, reStructuredText, or literal text.
    ````
 `````
 
-Options:
+### Options
 
 - `type`: `md` | `rst` | `literal` (default: `md`)
   - `md`: Parse output as Markdown using MyST parser
   - `rst`: Parse output as reStructuredText
   - `literal`: Include output as preformatted literal block
+
+### Example
+
+Assuming the following *estimation.py* file:
+
+```{literalinclude} ./estimation.py
+---
+linenos:
+---
+```
+
+As mentioned above it can be included like this:
+
+`````{tab-set-code}
+   ````md
+      ```{generate-include} estimation.py:data_table
+      ```
+   ````
+
+   ````rst
+   .. generate-include:: estimation.py:data_table
+   ````
+`````
+
+And it will then create a table like this:
+
+```{generate-include} estimation.py:data_table
+```
