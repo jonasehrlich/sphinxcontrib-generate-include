@@ -9,6 +9,7 @@ dependencies = ["myst-parser", "sphinx"]
 [dependency-groups]
 dev = [
     "pytest>=9.0.1",
+    "pytest-subtests>=0.15.0",
     "pytest-sugar>=1.1.1",
     "ruff>=0.14.6",
 ]
