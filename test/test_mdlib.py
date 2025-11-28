@@ -1,5 +1,6 @@
-from sphinxcontrib.generate_include import mdlib
 from pytest_subtests import SubTests
+
+from sphinxcontrib.generate_include import mdlib
 
 
 def test_table(subtests: SubTests):
