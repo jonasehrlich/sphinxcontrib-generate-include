@@ -20,6 +20,7 @@ dev = [
     "myst-parser>=4.0.1",
     "pyrefly>=0.43.1",
     "pytest>=9.0.1",
+    "pytest-cov>=7.0.0",
     "pytest-subtests>=0.15.0",
     "pytest-sugar>=1.1.1",
     "ruff>=0.14.6",
