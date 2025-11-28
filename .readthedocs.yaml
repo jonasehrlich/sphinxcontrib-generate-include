@@ -22,3 +22,6 @@ build:
       - asdf global uv latest
     create_environment:
       - uv venv "${READTHEDOCS_VIRTUALENV_PATH}"
+    install:
+      - UV_PROJECT_ENVIRONMENT="${READTHEDOCS_VIRTUALENV_PATH}" uv sync
+      - UV_PROJECT_ENVIRONMENT="${READTHEDOCS_VIRTUALENV_PATH}" uv pip install -e .
