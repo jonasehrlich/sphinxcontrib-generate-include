@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import importlib.machinery
 import importlib.util
+import itertools
 import sys
 import traceback
 from pathlib import Path
@@ -14,6 +16,23 @@ from docutils.utils import new_document
 from myst_parser.parsers.docutils_ import Parser as MystParser
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.typing import OptionSpec
+
+# Counter to ensure unique module names across all invocations
+_module_counter = itertools.count()
+
+
+class _NoCacheSourceFileLoader(importlib.machinery.SourceFileLoader):
+    """A SourceFileLoader that always reads from source, never from bytecode cache.
+
+    This is essential for sphinx-autobuild scenarios where the Python process
+    stays running and source files may change between builds.
+    """
+
+    def get_code(self, fullname: str):
+        """Compile code directly from source, bypassing any bytecode cache."""
+        source_path = self.get_filename(fullname)
+        source_bytes = self.get_data(source_path)
+        return compile(source_bytes, source_path, "exec", dont_inherit=True)
 
 
 class GenerateIncludeDirective(SphinxDirective):
@@ -84,25 +103,21 @@ class GenerateIncludeDirective(SphinxDirective):
     def _execute_function(self, file_path: Path, function_name: str) -> str:
         """Load a Python file and execute the specified function.
 
-        Uses importlib with proper cache invalidation to ensure fresh code
-        is loaded on each execution. This is critical for sphinx-autobuild
-        scenarios where files change while the Python process is running.
+        Uses importlib with a custom loader that bypasses bytecode caching
+        to ensure fresh code is loaded on each execution. This is critical
+        for sphinx-autobuild scenarios where files change while the Python
+        process is running.
         """
 
-        # Create a unique module name using timestamp to ensure fresh load
-        # This bypasses Python's module caching by using a new name each time
-        module_name = f"_generate_include_{file_path.stem}_{id(self)}"
+        # Create a unique module name using a monotonic counter to ensure fresh load
+        module_name = f"_generate_include_{file_path.stem}_{next(_module_counter)}"
 
-        # Invalidate any cached bytecode
-        importlib.invalidate_caches()
-
-        # Load the module from the file path
-        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        # Create a loader that bypasses bytecode caching
+        loader = _NoCacheSourceFileLoader(module_name, str(file_path))
+        spec = importlib.util.spec_from_loader(module_name, loader)
         if spec is None or spec.loader is None:
-            raise ImportError(f"Cannot load module from {file_path}")
+            raise ImportError(f"Cannot create module spec for {file_path}")
 
-        # Set submodule search locations for relative imports
-        spec.submodule_search_locations = [str(file_path.parent)]
         module = importlib.util.module_from_spec(spec)
 
         # Add the file's directory to sys.path temporarily for relative imports
